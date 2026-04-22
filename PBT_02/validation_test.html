@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form>
+
+    <!-- Trường hợp 1 -->
+        <input type="text" required value="">   <!-- User để trống -->
+
+    <!-- Trường hợp 2 -->
+        <input type="email" value="abc">        <!-- User gõ "abc" -->
+
+    <!-- Trường hợp 3 -->
+        <input type="number" min="1" max="10" value="15"> <!-- User gõ 15 -->
+
+    <!-- Trường hợp 4 -->
+        <input type="text" pattern="[0-9]{10}" value="abc123"> <!-- User gõ "abc123" -->
+
+    <!-- Trường hợp 5 -->
+        <input type="password" minlength="8" value="123">  <!-- User gõ "123" -->
+    <button type="submit">Submit</button>
+</form>
+</body>
+</html>
