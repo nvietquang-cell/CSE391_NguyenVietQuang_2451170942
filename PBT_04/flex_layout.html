@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Flexbox Easy</title>
+
+<style>
+/* ===== NAVBAR ===== */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: black;
+  color: white;
+  padding: 10px;
+}
+
+.menu a, .auth a {
+  color: white;
+  text-decoration: none;
+  margin: 0 10px;
+}
+
+/* ===== PRODUCT CONTAINER ===== */
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 10px;
+}
+
+/* ===== CARD ===== */
+.card {
+  width: 23%; /* gần 4 cột */
+  border: 1px solid #ccc;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ảnh */
+.card img {
+  width: 100%;
+}
+
+/* nút mua */
+.btn {
+  margin-top: auto;
+  background: black;
+  color: white;
+  text-align: center;
+  padding: 5px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+  <div>LOGO</div>
+
+  <div class="menu">
+    <a href="#">Home</a>
+    <a href="#">Products</a>
+    <a href="#">About</a>
+  </div>
+
+  <div class="auth">
+    <a href="#">Login</a>
+    <a href="#">Register</a>
+  </div>
+</div>
+
+<!-- PRODUCTS -->
+<div class="container">
+
+  <!-- 8 SẢN PHẨM -->
+
+  <div class="card">
+    <img src="https://tse3.mm.bing.net/th/id/OIP.RHdmmNMBPdOGQr8ZPPGGnAHaFj?pid=Api&P=0&h=180">
+    <p>Product 1</p>
+    <p>$10</p>
+    <div class="btn">Mua</div>
+  </div>
+
+  <div class="card">
+    <img src="https://cdn.tgdd.vn/Files/2023/03/10/1516364/3-100323-201353.jpg">
+    <p>Product 2</p>
+    <p>$20</p>
+    <div class="btn">Mua</div>
+  </div>
+
+  <div class="card">
+    <img src="https://tse3.mm.bing.net/th/id/OIP.sEDYx8eSkYZfBMOhTpnjkQHaDt?pid=Api&P=0&h=180">
+    <p>Product 3</p>
+    <p>$30</p>
+    <div class="btn">Mua</div>
+  </div>
+
+  <div class="card">
+    <img src="https://media.techz.vn/resize_x700x/media2019/source/4T4-khoa/((((((2026/T5/iphone-14-thiet-ke-co-dien-sang-trong.jpg">
+    <p>Product 4</p>
+    <p>$40</p>
+    <div class="btn">Mua</div>
+  </div>
+
+  <div class="card">
+    <img src="https://tse4.mm.bing.net/th/id/OIP.Oitc6OY09L0hnjYWRsEHlgHaE8?pid=Api&P=0&h=180">
+    <p>Product 5</p>
+    <p>$50</p>
+    <div class="btn">Mua</div>
+  </div>
+
+  <div class="card">
+    <img src="https://tse2.mm.bing.net/th/id/OIP.L0C6q3wbQ1AWKYEcOQixPQHaEK?pid=Api&P=0&h=180">
+    <p>Product 6</p>
+    <p>$60</p>
+    <div class="btn">Mua</div>
+  </div>
+
+  <div class="card">
+    <img src="https://tse2.mm.bing.net/th?id=OIF.BJ%2bkZpGkfBzUmLdNPjEwDA&pid=Api&P=0&h=180">
+    <p>Product 7</p>
+    <p>$70</p>
+    <div class="btn">Mua</div>
+  </div>
+
+  <div class="card">
+    <img src="https://tse4.mm.bing.net/th?id=OIF.S%2fkmAZp7XtW9eu13GpsjHQ&pid=Api&P=0&h=180">
+    <p>Product 8</p>
+    <p>$80</p>
+    <div class="btn">Mua</div>
+  </div>
+
+</div>
+
+</body>
+</html>
