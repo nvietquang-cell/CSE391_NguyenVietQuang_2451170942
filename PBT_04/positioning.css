@@ -1,0 +1,91 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ================= HEADER ================= */
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 60px;
+  width: 100%;
+  background: #111;
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  z-index: 1000;
+}
+
+/* ================= LAYOUT ================= */
+.container {
+  display: flex;
+  margin-top: 60px; /* tránh bị header che */
+}
+
+/* ================= SIDEBAR ================= */
+.sidebar {
+  width: 250px;
+  height: 100vh;
+  padding: 20px;
+  position: sticky;
+  top: 80px; /* dưới header */
+  background: #f3f3f3;
+}
+
+/* ================= CONTENT ================= */
+.content {
+  flex: 1;
+  padding: 20px;
+}
+
+/* ================= PRODUCT CARD ================= */
+.product-card {
+  width: 250px;
+  border: 1px solid #ddd;
+  padding: 15px;
+  margin-bottom: 20px;
+  position: relative; /* để badge absolute hoạt động */
+  background: #fff;
+}
+
+/* BADGE HOT */
+.badge-hot {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: red;
+  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+/* ================= SCROLL TO TOP BUTTON ================= */
+#toTop {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: none;
+  background: #111;
+  color: white;
+  font-size: 22px;
+  cursor: pointer;
+  display: none;
+}
+
+/* hover */
+#toTop:hover {
+  background: #333;
+}
