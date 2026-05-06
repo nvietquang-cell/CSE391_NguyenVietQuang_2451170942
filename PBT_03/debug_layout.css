@@ -1,0 +1,41 @@
+
+.container {
+    width: 960px;
+    margin: 20px auto;
+    background: white;
+    overflow: hidden; 
+}
+
+.sidebar, .content {
+    float: left;
+    border: 1px solid #ccc;
+    background: #e3f2fd;
+}
+
+/* =======================
+   Cách 1: border-box
+======================= */
+.fix-border-box .sidebar {
+    width: 300px;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.fix-border-box .content {
+    width: 660px;
+    padding: 30px;
+    box-sizing: border-box;
+}
+
+/* =======================
+   Cách 2: tính tay (content-box)
+======================= */
+.fix-manual .sidebar {
+    width: 250px; /* giữ nguyên vì padding nhỏ */
+    padding: 20px;
+}
+
+.fix-manual .content {
+    width: 600px;
+    padding: 30px;
+}
