@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Responsive Product Page - PBT_05</title>
+  <link rel="stylesheet" href="responsive.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <button class="hamburger" aria-label="Mở menu">☰</button>
+      <div class="logo">ShopDemo</div>
+      <nav class="main-nav">
+        <a href="#">Trang chủ</a>
+        <a href="#">Sản phẩm</a>
+        <a href="#">Liên hệ</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="page">
+    <aside class="sidebar">
+      <h3>Bộ lọc</h3>
+      <label>Danh mục
+        <select><option>Tất cả</option><option>Áo</option><option>Giày</option></select>
+      </label>
+      <label>Giá
+        <select><option>Tất cả</option><option>&lt; 200k</option><option>200k-500k</option></select>
+      </label>
+    </aside>
+
+    <main class="content">
+      <div class="topbar">Quảng cáo / banner</div>
+      <section class="product-grid">
+        <!-- 8 product cards -->
+        <article class="card">
+          <img src="https://via.placeholder.com/400x300?text=1" alt="product 1">
+          <h4>Product 1</h4>
+          <p class="price">₫199,000</p>
+          <button class="buy">Mua ngay</button>
+        </article>
+        <article class="card">
+          <img src="https://via.placeholder.com/400x300?text=2" alt="product 2">
+          <h4>Product 2</h4>
+          <p class="price">₫299,000</p>
+          <button class="buy">Mua ngay</button>
+        </article>
+        <article class="card">
+          <img src="https://via.placeholder.com/400x300?text=3" alt="product 3">
+          <h4>Product 3</h4>
+          <p class="price">₫159,000</p>
+          <button class="buy">Mua ngay</button>
+        </article>
+        <article class="card">
+          <img src="https://via.placeholder.com/400x300?text=4" alt="product 4">
+          <h4>Product 4</h4>
+          <p class="price">₫249,000</p>
+          <button class="buy">Mua ngay</button>
+        </article>
+        <article class="card">
+          <img src="https://via.placeholder.com/400x300?text=5" alt="product 5">
+          <h4>Product 5</h4>
+          <p class="price">₫89,000</p>
+          <button class="buy">Mua ngay</button>
+        </article>
+        <article class="card">
+          <img src="https://via.placeholder.com/400x300?text=6" alt="product 6">
+          <h4>Product 6</h4>
+          <p class="price">₫399,000</p>
+          <button class="buy">Mua ngay</button>
+        </article>
+        <article class="card">
+          <img src="https://via.placeholder.com/400x300?text=7" alt="product 7">
+          <h4>Product 7</h4>
+          <p class="price">₫129,000</p>
+          <button class="buy">Mua ngay</button>
+        </article>
+        <article class="card">
+          <img src="https://via.placeholder.com/400x300?text=8" alt="product 8">
+          <h4>Product 8</h4>
+          <p class="price">₫219,000</p>
+          <button class="buy">Mua ngay</button>
+        </article>
+      </section>
+    </main>
+
+    <aside class="ads">Quảng cáo</aside>
+  </div>
+
+  <footer class="site-footer">© 2026 ShopDemo</footer>
+
+  <script>
+    // Hamburger toggle (nhỏ, dành cho người mới học)
+    const btn = document.querySelector('.hamburger');
+    const nav = document.querySelector('.main-nav');
+    btn.addEventListener('click', ()=> nav.classList.toggle('open'));
+  </script>
+</body>
+</html>
