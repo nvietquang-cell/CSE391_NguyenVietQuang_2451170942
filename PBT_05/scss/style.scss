@@ -1,0 +1,27 @@
+@import 'variables';
+@import 'mixins';
+@import 'base';
+@import 'components';
+
+/* small helper for responsive typography */
+h1{font-size:1.6rem}
+@include respond-to(tablet){ h1{font-size:2rem} }
+@import 'variables';
+@import 'mixins';
+@import 'components';
+
+body{font-family: $font-primary;background:#f3f6fb;color:#253047;padding:0;margin:0}
+
+.site-header{background:white;box-shadow:0 1px 4px rgba(0,0,0,0.06)}
+
+.hamburger{background:transparent;border:0;font-size:1.2rem}
+
+.page{max-width:1200px;margin:18px auto;padding:$spacing-md;display:grid;grid-template-columns:1fr;gap:$spacing-md}
+
+@include respond-to(tablet){
+  .page{grid-template-columns:1fr 2fr}
+}
+
+@include respond-to(desktop){
+  .page{grid-template-columns:240px 1fr 200px}
+}
