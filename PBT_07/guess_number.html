@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Đoán Số - Bài B3</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            max-width: 400px;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .rules {
+            background: #f0f0f0;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            text-align: left;
+        }
+        
+        .rules h3 {
+            margin-top: 0;
+            color: #667eea;
+        }
+        
+        .rules ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+        
+        .rules li {
+            margin: 5px 0;
+        }
+        
+        .game-section {
+            display: none;
+        }
+        
+        .game-section.active {
+            display: block;
+        }
+        
+        .input-group {
+            margin: 20px 0;
+        }
+        
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #667eea;
+            border-radius: 5px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: #764ba2;
+            box-shadow: 0 0 5px rgba(118, 75, 162, 0.3);
+        }
+        
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px 5px;
+            transition: transform 0.2s;
+        }
+        
+        button:hover {
+            transform: scale(1.05);
+        }
+        
+        button:active {
+            transform: scale(0.95);
+        }
+        
+        .stats {
+            background: #e8f4f8;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            margin: 8px 0;
+        }
+        
+        .stat-label {
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .stat-value {
+            color: #667eea;
+            font-weight: bold;
+        }
+        
+        .message {
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        
+        .hint {
+            color: #764ba2;
+        }
+        
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeeba;
+        }
+        
+        .attempts {
+            margin: 20px 0;
+        }
+        
+        .attempt-list {
+            background: #f9f9f9;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: left;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+        
+        .attempt-item {
+            padding: 5px;
+            margin: 3px 0;
+            background: white;
+            border-left: 3px solid #667eea;
+            border-radius: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎮 GAME ĐOÁN SỐ</h1>
+        
+        <div class="rules">
+            <h3>📋 Luật chơi:</h3>
+            <ul>
+                <li>Máy sẽ chọn 1 số từ 1 đến 100</li>
+                <li>Bạn có tối đa <strong>7 lần đoán</strong></li>
+                <li>Máy sẽ cho biết "Cao hơn" hoặc "Thấp hơn"</li>
+                <li>Nếu đoán trùng lần trước → cảnh báo</li>
+                <li>Hết lượt → Game Over, lộ đáp án</li>
+            </ul>
+        </div>
+        
+        <!-- Start Section -->
+        <div id="startSection" class="game-section active">
+            <p>Sẵn sàng chơi? Nhấn nút START để bắt đầu!</p>
+            <button onclick="startGame()">🎯 START GAME</button>
+        </div>
+        
+        <!-- Playing Section -->
+        <div id="playingSection" class="game-section">
+            <div class="stats">
+                <div class="stat-item">
+                    <span class="stat-label">Lần đoán còn lại:</span>
+                    <span class="stat-value" id="attemptsLeft">7</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Đã đoán:</span>
+                    <span class="stat-value" id="guessedCount">0</span>
+                </div>
+            </div>
+            
+            <div class="input-group">
+                <input 
+                    type="number" 
+                    id="guessInput" 
+                    placeholder="Nhập số từ 1-100" 
+                    min="1" 
+                    max="100"
+                    onkeypress="if(event.key==='Enter') submitGuess()">
+                <button onclick="submitGuess()">✅ ĐOÁN</button>
+            </div>
+            
+            <div class="message" id="hint" style="display:none;"></div>
+            
+            <div class="attempts">
+                <strong>Lịch sử đoán:</strong>
+                <div class="attempt-list" id="attemptList"></div>
+            </div>
+        </div>
+        
+        <!-- Game Over Section -->
+        <div id="gameOverSection" class="game-section">
+            <div id="gameOverMessage"></div>
+            <div class="stats">
+                <div class="stat-item">
+                    <span class="stat-label">Số bí mật:</span>
+                    <span class="stat-value" id="revealNumber"></span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Lần đoán:</span>
+                    <span class="stat-value" id="finalAttempts"></span>
+                </div>
+            </div>
+            <button onclick="location.reload()">🔄 CHƠI LẠI</button>
+        </div>
+    </div>
+    
+    <script src="guess.js"></script>
+</body>
+</html>
