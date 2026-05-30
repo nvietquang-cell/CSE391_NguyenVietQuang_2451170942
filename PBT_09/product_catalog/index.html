@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Catalog - Interactive DOM</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="navbar">
+        <div class="navbar-container">
+            <h1 class="logo">🛍️ Product Store</h1>
+            <div class="navbar-right">
+                <button id="darkModeToggle" class="btn-dark-mode">🌙 Dark Mode</button>
+                <div class="cart-icon">
+                    🛒
+                    <span id="cartBadge" class="cart-badge">0</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="filter-section">
+                <h3>🔍 Tìm kiếm</h3>
+                <input 
+                    id="searchInput" 
+                    type="text" 
+                    class="search-input"
+                    placeholder="Tìm sản phẩm..."
+                >
+            </div>
+
+            <div class="filter-section">
+                <h3>📂 Danh mục</h3>
+                <div class="category-buttons">
+                    <button class="category-btn active" data-category="all">Tất cả</button>
+                    <button class="category-btn" data-category="phone">📱 Điện thoại</button>
+                    <button class="category-btn" data-category="laptop">💻 Laptop</button>
+                    <button class="category-btn" data-category="tablet">📱 Tablet</button>
+                    <button class="category-btn" data-category="accessory">🎧 Phụ kiện</button>
+                </div>
+            </div>
+
+            <div class="filter-section">
+                <h3>📊 Sắp xếp</h3>
+                <select id="sortSelect" class="sort-select">
+                    <option value="default">Mặc định</option>
+                    <option value="price-asc">Giá: Thấp → Cao</option>
+                    <option value="price-desc">Giá: Cao → Thấp</option>
+                    <option value="name-asc">Tên: A → Z</option>
+                    <option value="rating-desc">Đánh giá: Cao nhất</option>
+                </select>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="header">
+                <h2 id="resultTitle">Sản phẩm</h2>
+                <p id="resultCount" class="result-count">Hiển thị 0 sản phẩm</p>
+            </div>
+
+            <!-- Products Grid -->
+            <div id="productsGrid" class="products-grid"></div>
+
+            <!-- No Results -->
+            <div id="noResults" class="no-results">
+                <p>🔍 Không tìm thấy sản phẩm nào</p>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal Detail -->
+    <div id="productModal" class="modal hidden">
+        <div class="modal-overlay" id="modalOverlay"></div>
+        <div class="modal-content">
+            <button class="btn-close" id="closeModal">&times;</button>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
