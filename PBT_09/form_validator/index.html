@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Validator - Real-time Validation</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="form-container">
+            <header class="form-header">
+                <h1>📝 Đăng Ký Tài Khoản</h1>
+                <p>Điền đầy đủ thông tin để tạo tài khoản</p>
+            </header>
+
+            <form id="registrationForm" class="registration-form">
+                <!-- Full Name -->
+                <div class="form-group">
+                    <label for="fullName">👤 Họ tên (2-50 ký tự)</label>
+                    <input 
+                        type="text" 
+                        id="fullName" 
+                        name="fullName" 
+                        class="form-input"
+                        placeholder="Nhập họ tên..."
+                        required
+                    >
+                    <div class="validation-feedback">
+                        <span class="status-icon"></span>
+                        <span class="status-message"></span>
+                    </div>
+                </div>
+
+                <!-- Email -->
+                <div class="form-group">
+                    <label for="email">📧 Email</label>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        name="email" 
+                        class="form-input"
+                        placeholder="your@email.com"
+                        required
+                    >
+                    <div class="validation-feedback">
+                        <span class="status-icon"></span>
+                        <span class="status-message"></span>
+                    </div>
+                </div>
+
+                <!-- Phone -->
+                <div class="form-group">
+                    <label for="phone">📱 Số điện thoại (10 chữ số)</label>
+                    <input 
+                        type="text" 
+                        id="phone" 
+                        name="phone" 
+                        class="form-input"
+                        placeholder="0901234567"
+                        required
+                    >
+                    <div class="validation-feedback">
+                        <span class="status-icon"></span>
+                        <span class="status-message"></span>
+                    </div>
+                </div>
+
+                <!-- Password -->
+                <div class="form-group">
+                    <label for="password">🔒 Mật khẩu</label>
+                    <div class="password-wrapper">
+                        <input 
+                            type="password" 
+                            id="password" 
+                            name="password" 
+                            class="form-input"
+                            placeholder="Nhập mật khẩu..."
+                            required
+                        >
+                        <button type="button" class="toggle-password" id="togglePassword">👁️</button>
+                    </div>
+
+                    <!-- Password Strength Meter -->
+                    <div class="password-strength">
+                        <div class="strength-meter">
+                            <div id="strengthBar" class="strength-bar"></div>
+                        </div>
+                        <p id="strengthText" class="strength-text">Yếu</p>
+                    </div>
+
+                    <!-- Password Requirements -->
+                    <div class="password-requirements">
+                        <div class="requirement" id="req-length">
+                            <span class="req-icon">✗</span>
+                            <span>Ít nhất 8 ký tự</span>
+                        </div>
+                        <div class="requirement" id="req-lowercase">
+                            <span class="req-icon">✗</span>
+                            <span>Có chữ thường (a-z)</span>
+                        </div>
+                        <div class="requirement" id="req-uppercase">
+                            <span class="req-icon">✗</span>
+                            <span>Có chữ hoa (A-Z)</span>
+                        </div>
+                        <div class="requirement" id="req-number">
+                            <span class="req-icon">✗</span>
+                            <span>Có chữ số (0-9)</span>
+                        </div>
+                        <div class="requirement" id="req-special">
+                            <span class="req-icon">✗</span>
+                            <span>Có ký tự đặc biệt (!@#$%)</span>
+                        </div>
+                    </div>
+
+                    <div class="validation-feedback">
+                        <span class="status-icon"></span>
+                        <span class="status-message"></span>
+                    </div>
+                </div>
+
+                <!-- Confirm Password -->
+                <div class="form-group">
+                    <label for="confirmPassword">🔐 Xác nhận mật khẩu</label>
+                    <input 
+                        type="password" 
+                        id="confirmPassword" 
+                        name="confirmPassword" 
+                        class="form-input"
+                        placeholder="Nhập lại mật khẩu..."
+                        required
+                    >
+                    <div class="validation-feedback">
+                        <span class="status-icon"></span>
+                        <span class="status-message"></span>
+                    </div>
+                </div>
+
+                <!-- Terms & Conditions -->
+                <div class="form-group checkbox-group">
+                    <input 
+                        type="checkbox" 
+                        id="terms" 
+                        name="terms" 
+                        required
+                    >
+                    <label for="terms">Tôi đồng ý với <a href="#">điều khoản dịch vụ</a></label>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" id="submitBtn" class="submit-btn" disabled>
+                    🚀 Đăng ký
+                </button>
+            </form>
+        </div>
+
+        <!-- Success Modal -->
+        <div id="successModal" class="modal hidden">
+            <div class="modal-overlay" id="modalOverlay"></div>
+            <div class="modal-content">
+                <div class="success-icon">✅</div>
+                <h2>Đăng ký thành công!</h2>
+                <div class="success-details" id="successDetails"></div>
+                <button id="closeSuccessModal" class="btn-primary">Đóng</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
