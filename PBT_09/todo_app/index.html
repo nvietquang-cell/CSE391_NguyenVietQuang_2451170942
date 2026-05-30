@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo App - DOM Manipulation</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="todo-container">
+            <header class="todo-header">
+                <h1>📝 My Todo App</h1>
+                <p class="subtitle">Quản lý công việc hàng ngày của bạn</p>
+            </header>
+
+            <!-- Input Form -->
+            <form id="todoForm" class="todo-form">
+                <input 
+                    id="todoInput" 
+                    type="text" 
+                    class="todo-input"
+                    placeholder="Nhập công việc cần làm..."
+                    autocomplete="off"
+                >
+                <button type="submit" class="btn-add">➕ Thêm</button>
+            </form>
+
+            <!-- Filter Buttons -->
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-filter="all">📋 Tất cả</button>
+                <button class="filter-btn" data-filter="active">⏳ Chưa hoàn thành</button>
+                <button class="filter-btn" data-filter="completed">✅ Hoàn thành</button>
+            </div>
+
+            <!-- Stats -->
+            <div class="stats">
+                <span id="itemsLeft" class="stat-item">0 công việc còn lại</span>
+                <button id="clearCompleted" class="btn-clear">🗑️ Xóa hoàn thành</button>
+            </div>
+
+            <!-- Todo List -->
+            <ul id="todoList" class="todo-list"></ul>
+
+            <!-- Empty State -->
+            <div id="emptyState" class="empty-state">
+                <p>🎉 Không có công việc nào! Hãy thêm một cái mới.</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
