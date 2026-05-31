@@ -1,0 +1,56 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Multi-API Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="navbar">
+    <div class="nav-container">
+      <h1 class="logo">📊 Dashboard</h1>
+      <div class="nav-buttons">
+        <button id="refresh" class="btn btn-primary">🔄 Refresh All</button>
+      </div>
+    </div>
+  </div>
+  
+  <div class="container">
+    <div class="header">
+      <div class="info">
+        <p class="subtitle">Real-time Data Dashboard</p>
+        <div id="time" class="load-time"></div>
+      </div>
+    </div>
+    
+    <div class="widgets">
+      <div class="widget" id="w1">
+        <div class="widget-header">
+          <h3>👥 Random Users</h3>
+          <span class="widget-icon">👤</span>
+        </div>
+        <div class="body"></div>
+      </div>
+      
+      <div class="widget" id="w2">
+        <div class="widget-header">
+          <h3>📝 Latest Posts</h3>
+          <span class="widget-icon">📄</span>
+        </div>
+        <div class="body"></div>
+      </div>
+      
+      <div class="widget" id="w3">
+        <div class="widget-header">
+          <h3>🐕 Dog Images</h3>
+          <span class="widget-icon">🦴</span>
+        </div>
+        <div class="body"></div>
+      </div>
+    </div>
+  </div>
+  
+  <script src="script.js"></script>
+</body>
+</html>
