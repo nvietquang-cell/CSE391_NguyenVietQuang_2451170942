@@ -1,341 +1,126 @@
-# 🎯 PHẦN A & C — ANSWERS
+# PBT_10 — Answers (Phần A + C)
 
-## PHẦN A — KIỂM TRA ĐỌC HIỂU (15 điểm)
+## PHẦN A — KIỂM TRA ĐỌC HIỂU
 
-### Câu A1 — DOM Tree & querySelector (5đ)
+### A1 — Sync vs Async (5đ)
 
-#### 1. DOM Tree Diagram:
-```
-#app
-├── header
-│   ├── h1 (textContent: "Todo App")
-│   └── nav
-│       ├── a.active (href="#", textContent: "All")
-│       ├── a (href="#", textContent: "Active")
-│       └── a (href="#", textContent: "Completed")
-├── main
-│   ├── form#todoForm
-│   │   ├── input#todoInput
-│   │   └── button (type: submit, textContent: "Add")
-│   └── ul#todoList
-│       ├── li.todo-item (textContent: "Learn HTML")
-│       └── li.todo-item.completed (textContent: "Learn CSS")
-```
+Mã in ra theo thứ tự:
 
-#### 2. querySelector Solutions:
+1. `1 - Start`
+2. `4 - End`
+3. `3 - Promise`
+4. `6 - Promise 2`
+5. `2 - Timeout 0ms`
+6. `7 - Nested timeout`
+7. `5 - Timeout 100ms`
 
-| Yêu cầu | querySelector |
-|--------|---|
-| Chọn thẻ `<h1>` | `document.querySelector("h1")` |
-| Input trong form | `document.querySelector("#todoForm input")` |
-| Tất cả `.todo-item` | `document.querySelectorAll(".todo-item")` |
-| Link đang active | `document.querySelector("nav a.active")` |
-| `<li>` đầu tiên | `document.querySelector("#todoList li")` hoặc `document.querySelector("#todoList li:first-child")` |
-| Tất cả `<a>` trong `<nav>` | `document.querySelectorAll("nav a")` |
+Giải thích ngắn: Call stack chạy đồng bộ (`1`, `4`). Các Promise callbacks đi vào Microtask queue (chạy ngay sau call stack): `3`, `6`. Các `setTimeout` là macrotask — chỉ chạy sau khi microtasks xong; do đó `2` (timeout 0ms) và sau đó nested timeout `7` (được lập lịch trong microtask) sẽ chạy trước `5` (100ms).
 
----
+### A2 — Fetch API (5đ)
 
-### Câu A2 — innerHTML vs textContent (5đ)
+1. `await fetch(...)` — `fetch` trả về một `Promise` resolve thành `Response` object. Dùng `await` để chờ Promise hoàn thành và nhận `Response`.
+2. `response.ok` — `false` khi status HTTP ngoài khoảng 200-299, ví dụ: `404 Not Found`, `500 Internal Server Error`, `429 Too Many Requests`.
+3. `response.json()` — trả về Promise vì phải đọc body stream và parse JSON; cần `await` để có object JSON.
+4. `try...catch` — Catch được lỗi mạng (network failure), lỗi parsing JSON (invalid JSON), hoặc lỗi do `throw new Error` khi `!response.ok`. HTTP error như 404 sẽ không tự động reject fetch, nên cần kiểm tra `response.ok`.
 
-#### Sự Khác Biệt:
+### A3 — Promise States (5đ)
 
-| Thuộc tính | Công dụng | Xử lý HTML |
-|-----------|---------|-----------|
-| `textContent` | Lấy/gán **text thuần** | Bỏ qua HTML tags, hiển thị dạng string |
-| `innerHTML` | Lấy/gán **HTML code** | Parse & render HTML tags |
+- Ba trạng thái: `Pending` → `Fulfilled` (khi resolve) hoặc `Pending` → `Rejected` (khi reject).
 
-#### Ví Dụ:
-```javascript
-const div = document.querySelector("div");
+Callback Hell: là khi callback lồng callback nhiều cấp khiến code khó đọc.
 
-// Với HTML: <div><b>Hello</b></div>
-
-div.textContent;   // "Hello"
-div.innerHTML;     // "<b>Hello</b>"
-
-// Gán giá trị:
-div.textContent = "<b>World</b>";  // Hiển thị: <b>World</b> (text)
-div.innerHTML = "<b>World</b>";    // Hiển thị: **World** (bold)
-```
-
-#### Khi nào dùng mỗi cái:
-- **`textContent`**: 
-  - Khi chỉ muốn hiển thị **text không định dạng**
-  - Khi gán giá trị từ **user input** (bảo mật)
-  - Performance tốt hơn (không parse HTML)
-  
-- **`innerHTML`**:
-  - Khi cần render **HTML content** (layout, styling)
-  - Tạo HTML từ **trusted source** (không user input)
-
-#### ⚠️ XSS Vulnerability Explanation:
-
-**innerHTML gây lỗ hổng XSS vì:**
-- Parse và execute script tags
-- Attacker có thể chèn code JavaScript vào HTML
-- Có thể đánh cắp cookies, session, data nhạy cảm
-
-**Ví dụ tấn công:**
-```javascript
-const userInput = document.querySelector("#search").value;
-// User nhập: <img src=x onerror="alert('Hacked!')">
-
-document.querySelector("#result").innerHTML = userInput;
-// ❌ NGUY HIỂM: Script sẽ chạy!
-```
-
-**Cách Sửa:**
-```javascript
-// Cách 1: Dùng textContent (nếu không cần HTML)
-document.querySelector("#result").textContent = userInput;
-
-// Cách 2: Escape HTML
-function escapeHTML(text) {
-    const div = document.createElement("div");
-    div.textContent = text;
-    return div.innerHTML;
-}
-document.querySelector("#result").innerHTML = escapeHTML(userInput);
-
-// Cách 3: DOMPurify library (recommended)
-document.querySelector("#result").innerHTML = DOMPurify.sanitize(userInput);
-```
-
----
-
-### Câu A3 — Event Bubbling (5đ)
-
-#### Dự đoán Output:
+Ví dụ callback-hell 4 cấp:
 
 ```javascript
-// Click vào button → Output:
-BUTTON
-INNER
-OUTER
-
-// Giải thích: Event bubbles từ innermost → outermost
-// Button clicked → Trigger "BUTTON"
-// Bubble lên inner div → Trigger "INNER"
-// Bubble lên outer div → Trigger "OUTER"
-```
-
-#### Nếu uncomment `e.stopPropagation()`:
-
-```javascript
-// Click vào button → Output:
-BUTTON
-
-// Giải thích: stopPropagation() dừng event bubbling ngay lập tức
-// "INNER" và "OUTER" sẽ KHÔNG được trigger
-```
-
-#### Event Bubbling Phase Diagram:
-
-```
-Click trên #btn
-    ↓
-#btn listener → console.log("BUTTON")  [Capturing Phase → Target Phase]
-    ↓ (BUBBLE UP)
-#inner listener → console.log("INNER")  [Bubbling Phase]
-    ↓ (BUBBLE UP)
-#outer listener → console.log("OUTER")  [Bubbling Phase]
-    ↓
-END
-```
-
----
-
-## PHẦN C — DEBUG & PHÂN TÍCH (15 điểm)
-
-### Câu C1 — Debug DOM Code (8đ)
-
-#### Các Lỗi Tìm Được:
-
-| # | Dòng | Lỗi | Sửa |
-|---|------|-----|-----|
-| 1 | 10 | `countDisplay.innerHTML = count` (không cần innerHTML cho số) | `countDisplay.textContent = count` |
-| 2 | 21 | `addEventListener("onclick", ...)` sai event name | `addEventListener("click", ...)` |
-| 3 | 26 | `countDisplay = count` gán lại biến DOM | `countDisplay.textContent = count` |
-| 4 | 27 | `historyList.innerHTML = null` không phải cách xóa | `historyList.innerHTML = ""` hoặc `historyList.textContent = ""` |
-| 5 | 34 | `item.remove` (thiếu dấu ngoặc) | `item.remove()` |
-| 6 | 40 | `beforeunload` không phù hợp, nên dùng `change` event hoặc auto-save | Thêm event listener khi count thay đổi để save |
-| 7 | 46 | `localStorage.getItem()` trả về string, cần parse | `count = parseInt(localStorage.getItem("count")) \|\| 0` |
-
-#### Code Sửa Hoàn Chỉnh:
-
-```javascript
-// App: Counter with history
-const countDisplay = document.querySelector(".count");
-const historyList = document.getElementById("history");
-
-let count = 0;
-
-function saveToLocalStorage() {
-    localStorage.setItem("count", count);
-    localStorage.setItem("history", historyList.innerHTML);
-}
-
-document.querySelector("#incrementBtn").addEventListener("click", function() {
-    count++;
-    countDisplay.textContent = count;  // FIX: innerHTML → textContent
-    
-    // Lưu history
-    const li = document.createElement("li");
-    li.textContent = "Count changed to " + count;
-    li.addEventListener("click", function() {
-        deleteHistory(this);
+doA(arg, (err, a) => {
+  doB(a, (err, b) => {
+    doC(b, (err, c) => {
+      doD(c, (err, d) => {
+        // xử lý
+      });
     });
-    historyList.append(li);
-    saveToLocalStorage();
-});
-
-document.querySelector("#decrementBtn").addEventListener("click", function() {  // FIX: "onclick" → "click"
-    count--;
-    countDisplay.textContent = count;
-});
-
-document.querySelector("#resetBtn").addEventListener("click", () => {
-    count = 0;
-    countDisplay.textContent = count;  // FIX: countDisplay = count → textContent
-    historyList.innerHTML = "";  // FIX: null → ""
-    saveToLocalStorage();
-});
-
-function deleteHistory(element) {
-    element.parentNode.removeChild(element);
-    saveToLocalStorage();
-}
-
-// Clear all history
-document.querySelector("#clearHistory").addEventListener("click", () => {
-    const items = historyList.querySelectorAll("li");
-    items.forEach(item => {
-        item.remove();  // FIX: remove → remove()
-    });
-    saveToLocalStorage();
-});
-
-// Load from localStorage
-window.addEventListener("load", () => {
-    const savedCount = localStorage.getItem("count");
-    const savedHistory = localStorage.getItem("history");
-    
-    if (savedCount) {
-        count = parseInt(savedCount);  // FIX: Add parseInt
-        countDisplay.textContent = count;
-    }
-    
-    if (savedHistory) {
-        historyList.innerHTML = savedHistory;
-    }
+  });
 });
 ```
+
+Refactor với async/await:
+
+```javascript
+async function run() {
+  try {
+    const a = await doA(arg);
+    const b = await doB(a);
+    const c = await doC(b);
+    const d = await doD(c);
+    // xử lý
+  } catch (err) {
+    console.error(err);
+  }
+}
+```
+
+## PHẦN C — PHÂN TÍCH (10đ + 10đ)
+
+### C1 — Error Handling Strategy (10đ)
+
+1) Network errors (mất mạng):
+- Hiển thị thông báo người dùng (toast), bật lại trạng thái offline UI.
+- Thử lại tự động theo backoff với `fetchWithRetry` hoặc cho người dùng nút 'Thử lại'.
+
+2) API errors (500, 404, 429):
+- 4xx (client error, 404): thông báo rõ ràng (ví dụ: "Không tìm thấy sản phẩm").
+- 5xx (server error): thông báo tạm thời, khuyên thử lại sau; log để gửi về lỗi hệ thống.
+- 429 (rate limit): đọc header `Retry-After` nếu có, hoặc áp dụng exponential backoff trước khi retry.
+
+3) Timeout (>10s):
+- Hủy request sau 10s bằng `AbortController`.
+
+Ví dụ `fetchWithTimeout`:
+
+```javascript
+async function fetchWithTimeout(url, ms = 10000, options = {}) {
+  const controller = new AbortController();
+  const id = setTimeout(() => controller.abort(), ms);
+  try {
+    const res = await fetch(url, { ...options, signal: controller.signal });
+    clearTimeout(id);
+    return res;
+  } catch (err) {
+    clearTimeout(id);
+    throw err;
+  }
+}
+```
+
+4) Retry logic — `fetchWithRetry` (thử lại 3 lần khi network error):
+
+```javascript
+async function fetchWithRetry(url, options = {}, maxRetries = 3, backoff = 500) {
+  for (let i = 0; i < maxRetries; i++) {
+    try {
+      const res = await fetch(url, options);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      return res;
+    } catch (err) {
+      const isNetworkError = err.name === 'TypeError' || err.name === 'AbortError';
+      if (i === maxRetries - 1 || !isNetworkError) throw err;
+      await new Promise(r => setTimeout(r, backoff * Math.pow(2, i)));
+    }
+  }
+}
+```
+
+Giải thích: chỉ retry khi lỗi mạng/timeout; với lỗi HTTP 4xx/5xx thường không tự động retry (trừ 429 với Retry-After).
+
+### C2 — Promise methods (10đ)
+
+- `.all()`: resolve khi tất cả Promise resolve; reject ngay khi một Promise reject. Dùng khi mọi kết quả đều cần thiết.
+- `.allSettled()`: chờ tất cả hoàn thành bất kể resolve/reject, trả trạng thái cho từng Promise. Dùng khi cần hiển thị kết quả độc lập, 1 API lỗi không phá cả batch.
+- `.race()`: trả Promise của lời hứa đầu tiên resolve/reject. Dùng cho timeout hoặc khi chỉ cần kết quả nhanh nhất.
+- `.any()`: resolve khi bất kỳ Promise nào resolve; reject khi tất cả reject. Dùng khi cần bất kỳ nguồn thành công nào.
+
+Ví dụ thực tế (mô tả ngắn trong file bài nộp): sử dụng `Promise.allSettled` cho dashboard tổng hợp API để mỗi widget xử lý riêng lẻ.
 
 ---
 
-### Câu C2 — Performance & Event Delegation (7đ)
-
-#### 1. Tại sao bind event lên 1000 elements riêng lẻ là BAD PRACTICE?
-
-**Vấn đề:**
-- **Memory overhead**: Tạo 1000 event listeners → chiếm 1000 lần memory
-- **DOM performance**: Mỗi lần thêm/xóa element phải rebind event → slow
-- **Garbage collection**: 1000 functions objects giữ reference đến scope → khó garbage collect
-- **Reflow/Repaint**: Thêm 1000 listeners trigger browser reflow nhiều lần
-
-**Ví dụ xấu:**
-```javascript
-const items = document.querySelectorAll(".item");
-items.forEach(item => {
-    item.addEventListener("click", handleClick);  // ❌ 1000 listeners!
-});
-```
-
-#### Event Delegation giải quyết thế nào?
-
-**Event Delegation:**
-- Bind event listener lên **parent element** chung
-- Khi event xảy ra, dùng `e.target` để check xem element nào triggered
-- Tất cả child elements tự động handle event thông qua bubbling
-
-**Lợi ích:**
-- ✅ Memory: Chỉ 1 listener thay vì 1000
-- ✅ Performance: Không cần rebind khi thêm/xóa items
-- ✅ Dynamic: Automatically handle mới added elements
-- ✅ GC friendly: Ít function references
-
-**Ví dụ tốt:**
-```javascript
-const list = document.querySelector(".items-list");  // Parent
-
-list.addEventListener("click", (e) => {
-    if (e.target.classList.contains("item")) {
-        handleClick(e.target);  // ✅ Chỉ 1 listener!
-    }
-});
-```
-
-#### 2. Refactor với DocumentFragment
-
-**Vấn đề code gốc:**
-```javascript
-for (let i = 0; i < 1000; i++) {
-    const div = document.createElement("div");
-    div.textContent = `Item ${i}`;
-    document.body.appendChild(div);   // ❌ 1000 lần reflow!
-}
-```
-
-**Giải thích vấn đề:**
-- Mỗi lần `appendChild` đều trigger browser reflow (recalculate layout)
-- 1000 lần appendChild = 1000 lần reflow → **RẤT CHẬM**
-
-**Cách Refactor với DocumentFragment:**
-```javascript
-const fragment = document.createDocumentFragment();
-
-for (let i = 0; i < 1000; i++) {
-    const div = document.createElement("div");
-    div.textContent = `Item ${i}`;
-    fragment.appendChild(div);  // Append vào fragment (không trigger reflow)
-}
-
-document.body.appendChild(fragment);  // ✅ Chỉ 1 lần reflow!
-```
-
-**Tại sao nhanh hơn:**
-- `DocumentFragment` là **virtual DOM** (không nằm trong actual DOM)
-- Append vào fragment **không trigger reflow**
-- Khi `appendChild(fragment)` vào body, fragment được "flattened" → tất cả children thêm vào
-- Kết quả: **Chỉ 1 lần reflow** thay vì 1000 lần
-
-**Performance Comparison:**
-```
-❌ Cách cũ: 1000 appendChild → 1000 reflows → 3000ms
-✅ DocumentFragment: 1 appendChild → 1 reflow → 10ms
-```
-
-**Advanced: Thêm event delegation vào:**
-```javascript
-const fragment = document.createDocumentFragment();
-const container = document.querySelector("#container");
-
-for (let i = 0; i < 1000; i++) {
-    const div = document.createElement("div");
-    div.className = "item";
-    div.textContent = `Item ${i}`;
-    div.dataset.id = i;
-    fragment.appendChild(div);
-}
-
-container.appendChild(fragment);
-
-// Event Delegation
-container.addEventListener("click", (e) => {
-    if (e.target.classList.contains("item")) {
-        console.log(`Clicked item ${e.target.dataset.id}`);
-    }
-});
-```
-
-
+Ghi chú: Tôi đã tạo mã ví dụ và các app mẫu trong các thư mục `weather_app/`, `user_directory/`, `gallery/`, `dashboard/` để minh hoạ và nộp bài.
