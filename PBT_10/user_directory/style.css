@@ -180,6 +180,29 @@ body {
   border-left: 4px solid #d32f2f;
 }
 
+.error-message.success {
+  background: #e8f5e9;
+  color: #2e7d32;
+  border-left-color: #2e7d32;
+}
+
+.card.skeleton {
+  min-height: 160px;
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.card.skeleton div {
+  background: #e0e0e0;
+  border-radius: 8px;
+  height: 16px;
+  margin-bottom: 14px;
+}
+
+.card.skeleton div:last-child {
+  width: 70%;
+}
+
 .hidden {
   display: none;
 }

@@ -1,218 +1,264 @@
 const api = {
   baseURL: 'https://jsonplaceholder.typicode.com',
+
   async getUsers() {
-    const r = await fetch(this.baseURL + '/users');
-    if (!r.ok) throw new Error(r.status);
-    return r.json();
+    const response = await fetch(this.baseURL + '/users');
+    if (!response.ok) throw new Error(response.status);
+    return response.json();
   },
+
   async getUser(id) {
-    const r = await fetch(this.baseURL + '/users/' + id);
-    if (!r.ok) throw new Error(r.status);
-    return r.json();
+    const response = await fetch(this.baseURL + '/users/' + id);
+    if (!response.ok) throw new Error(response.status);
+    return response.json();
   },
+
   async createUser(data) {
-    const r = await fetch(this.baseURL + '/users', {
+    const response = await fetch(this.baseURL + '/users', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data)
     });
-    if (!r.ok) throw new Error(r.status);
-    return r.json();
+    if (!response.ok) throw new Error(response.status);
+    return response.json();
   },
+
   async updateUser(id, data) {
-    const r = await fetch(this.baseURL + '/users/' + id, {
+    const response = await fetch(this.baseURL + '/users/' + id, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data)
     });
-    if (!r.ok) throw new Error(r.status);
-    return r.json();
+    if (!response.ok) throw new Error(response.status);
+    return response.json();
   },
+
   async deleteUser(id) {
-    const r = await fetch(this.baseURL + '/users/' + id, { method: 'DELETE' });
-    if (!r.ok) throw new Error(r.status);
-    return r;
+    const response = await fetch(this.baseURL + '/users/' + id, { method: 'DELETE' });
+    if (!response.ok) throw new Error(response.status);
+    return response;
   }
 };
 
-const el = {
-  users: document.getElementById('users'),
-  loading: document.getElementById('loading'),
-  search: document.getElementById('search'),
-  create: document.getElementById('create'),
-  modal: document.getElementById('modal'),
-  form: document.getElementById('user-form'),
-  modalTitle: document.getElementById('modal-title'),
-  formName: document.getElementById('form-name'),
-  formEmail: document.getElementById('form-email'),
-  formPhone: document.getElementById('form-phone'),
-  formCompany: document.getElementById('form-company'),
-  errorMessage: document.getElementById('error-message')
-};
+const ui = {
+  elements: {
+    users: document.getElementById('users'),
+    loading: document.getElementById('loading'),
+    search: document.getElementById('search'),
+    create: document.getElementById('create'),
+    modal: document.getElementById('modal'),
+    form: document.getElementById('user-form'),
+    modalTitle: document.getElementById('modal-title'),
+    formName: document.getElementById('form-name'),
+    formEmail: document.getElementById('form-email'),
+    formPhone: document.getElementById('form-phone'),
+    formCompany: document.getElementById('form-company'),
+    errorMessage: document.getElementById('error-message')
+  },
 
-let usersCache = [];
-let currentEditingUserId = null;
+  state: {
+    users: [],
+    query: '',
+    editingUserId: null
+  },
 
-function renderUsers(list) {
-  el.users.innerHTML = '';
-  if (list.length === 0) {
-    el.users.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #999; padding: 40px;">No users found</p>';
-    return;
-  }
-  
-  list.forEach(u => {
-    const card = document.createElement('div');
-    card.className = 'card';
-    card.innerHTML = `
-      <strong>${u.name}</strong>
-      <div>✉️ ${u.email}</div>
-      ${u.phone ? `<div>📞 ${u.phone}</div>` : ''}
-      ${u.company?.name ? `<div>🏢 ${u.company.name}</div>` : ''}
-      <div class="actions">
-        <button class="edit" data-id="${u.id}">✏️ Edit</button>
-        <button class="del" data-id="${u.id}">🗑️ Delete</button>
-      </div>
-    `;
-    el.users.appendChild(card);
-  });
-}
+  renderUsers(list) {
+    this.elements.users.innerHTML = '';
 
-function showLoading(v = true) {
-  el.loading.classList.toggle('hidden', !v);
-}
+    if (list.length === 0) {
+      this.elements.users.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #999; padding: 40px;">No users found</p>';
+      return;
+    }
 
-function showError(message) {
-  el.errorMessage.textContent = message;
-  el.errorMessage.classList.remove('hidden');
-  setTimeout(() => {
-    el.errorMessage.classList.add('hidden');
-  }, 5000);
-}
+    list.forEach((user) => {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.innerHTML = `
+        <strong>${user.name}</strong>
+        <div>✉️ ${user.email}</div>
+        ${user.phone ? `<div>📞 ${user.phone}</div>` : ''}
+        ${user.company?.name ? `<div>🏢 ${user.company.name}</div>` : ''}
+        <div class="actions">
+          <button class="edit" data-id="${user.id}">✏️ Edit</button>
+          <button class="del" data-id="${user.id}">🗑️ Delete</button>
+        </div>
+      `;
+      this.elements.users.appendChild(card);
+    });
+  },
 
-function openModal(title, user = null) {
-  el.modalTitle.textContent = title;
-  
-  if (user) {
-    currentEditingUserId = user.id;
-    el.formName.value = user.name || '';
-    el.formEmail.value = user.email || '';
-    el.formPhone.value = user.phone || '';
-    el.formCompany.value = user.company?.name || '';
-  } else {
-    currentEditingUserId = null;
-    el.form.reset();
-  }
-  
-  el.modal.classList.remove('hidden');
-  el.formName.focus();
-}
+  renderSkeleton(count = 6) {
+    this.elements.users.innerHTML = Array.from({ length: count }, () => {
+      return `
+        <div class="card skeleton">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div style="width: 70%;"></div>
+        </div>
+      `;
+    }).join('');
+  },
 
-function closeModal() {
-  el.modal.classList.add('hidden');
-  el.form.reset();
-  currentEditingUserId = null;
-}
+  getFilteredUsers() {
+    const query = this.state.query.trim().toLowerCase();
+    if (!query) return this.state.users;
+    return this.state.users.filter((user) =>
+      user.name.toLowerCase().includes(query) ||
+      user.email.toLowerCase().includes(query)
+    );
+  },
 
-async function load() {
-  try {
-    showLoading(true);
-    usersCache = await api.getUsers();
-    renderUsers(usersCache);
-  } catch (err) {
-    showError('Error loading users: ' + err.message);
-  } finally {
-    showLoading(false);
-  }
-}
+  renderFilteredUsers() {
+    this.renderUsers(this.getFilteredUsers());
+  },
 
-// Search
-el.search.addEventListener('input', () => {
-  const q = el.search.value.toLowerCase().trim();
-  const filtered = usersCache.filter(u =>
-    u.name.toLowerCase().includes(q) || u.email.toLowerCase().includes(q)
-  );
-  renderUsers(filtered);
-});
+  showLoading(show = true) {
+    this.elements.loading.classList.toggle('hidden', !show);
+    if (show) {
+      this.renderSkeleton();
+    }
+  },
 
-// Create button
-el.create.addEventListener('click', () => {
-  openModal('➕ New User');
-});
+  showMessage(message, type = 'error') {
+    const messageEl = this.elements.errorMessage;
+    messageEl.textContent = message;
+    messageEl.className = 'error-message';
+    if (type === 'success') {
+      messageEl.classList.add('success');
+    }
+    messageEl.classList.remove('hidden');
+    setTimeout(() => {
+      messageEl.classList.add('hidden');
+    }, 5000);
+  },
 
-// Form submit
-el.form.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  
-  const name = el.formName.value.trim();
-  const email = el.formEmail.value.trim();
-  const phone = el.formPhone.value.trim();
-  const company = el.formCompany.value.trim();
-  
-  if (!name || !email) {
-    showError('Name and Email are required');
-    return;
-  }
-  
-  try {
-    const userData = { name, email, phone, company: { name: company } };
-    let result;
-    
-    if (currentEditingUserId) {
-      // Update
-      result = await api.updateUser(currentEditingUserId, userData);
-      usersCache = usersCache.map(x => x.id == currentEditingUserId ? result : x);
-      showError('✓ User updated successfully');
+  openModal(title, user = null) {
+    this.elements.modalTitle.textContent = title;
+
+    if (user) {
+      this.state.editingUserId = user.id;
+      this.elements.formName.value = user.name || '';
+      this.elements.formEmail.value = user.email || '';
+      this.elements.formPhone.value = user.phone || '';
+      this.elements.formCompany.value = user.company?.name || '';
     } else {
-      // Create
-      result = await api.createUser(userData);
-      usersCache.unshift(result);
-      showError('✓ User created successfully');
+      this.state.editingUserId = null;
+      this.elements.form.reset();
     }
-    
-    renderUsers(usersCache);
-    closeModal();
-  } catch (err) {
-    showError('Error saving user: ' + err.message);
+
+    this.elements.modal.classList.remove('hidden');
+    this.elements.formName.focus();
+  },
+
+  closeModal() {
+    this.elements.modal.classList.add('hidden');
+    this.elements.form.reset();
+    this.state.editingUserId = null;
   }
+};
+
+async function loadUsers() {
+  try {
+    ui.showLoading(true);
+    ui.state.users = await api.getUsers();
+    ui.renderFilteredUsers();
+  } catch (error) {
+    ui.showMessage('Error loading users: ' + error.message);
+    ui.renderUsers([]);
+  } finally {
+    ui.showLoading(false);
+  }
+}
+
+ui.elements.search.addEventListener('input', () => {
+  ui.state.query = ui.elements.search.value;
+  ui.renderFilteredUsers();
 });
 
-// Close modal
-document.querySelector('.close-modal').addEventListener('click', closeModal);
-document.querySelector('.btn-cancel').addEventListener('click', closeModal);
-el.modal.addEventListener('click', (e) => {
-  if (e.target === el.modal || e.target.classList.contains('modal-overlay')) {
-    closeModal();
-  }
+ui.elements.create.addEventListener('click', () => {
+  ui.openModal('➕ New User');
 });
 
-// Edit and Delete actions
-el.users.addEventListener('click', async (e) => {
-  const userId = e.target.dataset.id;
-  
-  if (e.target.classList.contains('edit')) {
-    const u = usersCache.find(x => x.id == userId);
-    openModal('✏️ Edit User', u);
+ui.elements.form.addEventListener('submit', async (event) => {
+  event.preventDefault();
+
+  const name = ui.elements.formName.value.trim();
+  const email = ui.elements.formEmail.value.trim();
+  const phone = ui.elements.formPhone.value.trim();
+  const company = ui.elements.formCompany.value.trim();
+
+  if (!name || !email) {
+    ui.showMessage('Name and Email are required');
+    return;
   }
-  
-  if (e.target.classList.contains('del')) {
-    if (confirm('Are you sure you want to delete this user?')) {
-      try {
-        await api.deleteUser(userId);
-        usersCache = usersCache.filter(x => x.id != userId);
-        renderUsers(usersCache);
-        showError('✓ User deleted successfully');
-      } catch (err) {
-        showError('Error deleting user: ' + err.message);
+
+  try {
+      const userData = { name, email, phone };
+      if (company) {
+        userData.company = { name: company };
       }
+    let result;
+
+    if (ui.state.editingUserId) {
+      result = await api.updateUser(ui.state.editingUserId, userData);
+      ui.state.users = ui.state.users.map((user) =>
+        user.id == ui.state.editingUserId ? result : user
+      );
+      ui.closeModal();
+      ui.renderFilteredUsers();
+      ui.showMessage('✓ User updated successfully', 'success');
+    } else {
+      result = await api.createUser(userData);
+      ui.state.users.unshift(result);
+      ui.closeModal();
+      ui.renderFilteredUsers();
+      ui.showMessage('✓ User created successfully', 'success');
+    }
+  } catch (error) {
+    ui.showMessage('Error saving user: ' + error.message);
+  }
+});
+
+document.querySelector('.close-modal').addEventListener('click', () => ui.closeModal());
+document.querySelector('.btn-cancel').addEventListener('click', () => ui.closeModal());
+
+ui.elements.modal.addEventListener('click', (event) => {
+  if (event.target === ui.elements.modal || event.target.classList.contains('modal-overlay')) {
+    ui.closeModal();
+  }
+});
+
+ui.elements.users.addEventListener('click', async (event) => {
+  const button = event.target.closest('button');
+  if (!button || !ui.elements.users.contains(button)) return;
+
+  const userId = button.dataset.id;
+  if (!userId) return;
+
+  if (button.classList.contains('edit')) {
+    const user = ui.state.users.find((item) => item.id == userId);
+    if (user) ui.openModal('✏️ Edit User', user);
+  }
+
+  if (button.classList.contains('del')) {
+    if (!confirm('Are you sure you want to delete this user?')) return;
+
+    try {
+      await api.deleteUser(userId);
+      ui.state.users = ui.state.users.filter((item) => item.id != userId);
+      ui.renderFilteredUsers();
+      ui.showMessage('✓ User deleted successfully', 'success');
+    } catch (error) {
+      ui.showMessage('Error deleting user: ' + error.message);
     }
   }
 });
 
-// Close modal on Escape key
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape' && !el.modal.classList.contains('hidden')) {
-    closeModal();
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape' && !ui.elements.modal.classList.contains('hidden')) {
+    ui.closeModal();
   }
 });
 
-load();
+loadUsers();
