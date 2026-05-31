@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Infinite Gallery</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="header">
+    <h1 class="title">🖼️ Infinite Gallery</h1>
+    <p class="subtitle">Scroll to load more beautiful photos • Click to preview</p>
+  </div>
+  
+  <div class="container">
+    <div id="grid" class="grid"></div>
+    <div id="loader" class="loader hidden">
+      <div class="spinner"></div>
+      <p>Loading more images...</p>
+    </div>
+    <div id="load-trigger" class="load-trigger"></div>
+  </div>
+  
+  <div id="lightbox" class="lightbox hidden">
+    <div class="lightbox-content">
+      <button id="prev" class="lightbox-btn prev-btn" title="Previous (←)">❮</button>
+      <img id="lb-img" src="" alt="Preview">
+      <button id="next" class="lightbox-btn next-btn" title="Next (→)">❯</button>
+      <button id="close" class="close-btn" title="Close (Esc)">✕</button>
+      <div class="image-info">
+        <span id="image-counter">1 / 1</span>
+      </div>
+    </div>
+  </div>
+  
+  <script src="script.js"></script>
+</body>
+</html>
