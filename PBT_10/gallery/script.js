@@ -1,5 +1,6 @@
 const grid = document.getElementById('grid');
 const loader = document.getElementById('loader');
+const loadMoreBtn = document.getElementById('load-more');
 const trigger = document.getElementById('load-trigger');
 const lightbox = document.getElementById('lightbox');
 const lbImg = document.getElementById('lb-img');
@@ -16,6 +17,8 @@ let currentImageIndex = -1;
 async function loadPhotos() {
   if (loading) return;
   loading = true;
+  loadMoreBtn.classList.add('hidden');
+  loader.innerHTML = '<div class="spinner"></div><p>Loading more images...</p>';
   loader.classList.remove('hidden');
   
   try {
@@ -23,13 +26,14 @@ async function loadPhotos() {
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     
     const items = await res.json();
+    if (!items || !items.length) throw new Error('No images returned');
+    
     items.forEach(it => {
       const img = document.createElement('img');
       img.dataset.src = it.download_url;
-      img.alt = it.author;
+      img.alt = `Photo by ${it.author}`;
       img.loading = 'lazy';
       
-      // Store image data
       allImages.push({
         src: it.download_url,
         author: it.author,
@@ -48,10 +52,13 @@ async function loadPhotos() {
     page++;
   } catch (err) {
     console.error('Error loading photos:', err);
-    loader.innerHTML = '<p style="color: #d32f2f;">❌ Error loading images</p>';
+    loader.innerHTML = '<p class="gallery-error">❌ Error loading images. Please check your connection and click load more.</p>';
+    loadMoreBtn.classList.remove('hidden');
   } finally {
     loading = false;
-    loader.classList.add('hidden');
+    if (!loader.innerHTML.includes('gallery-error')) {
+      loader.classList.add('hidden');
+    }
   }
 }
 
@@ -73,15 +80,20 @@ function lazyObserve() {
 }
 
 // Infinite scroll observer
-const obs = new IntersectionObserver(entries => {
-  if (entries[0].isIntersecting) loadPhotos();
-}, { rootMargin: '200px' });
-
-obs.observe(trigger);
+let obs;
+if ('IntersectionObserver' in window) {
+  obs = new IntersectionObserver(entries => {
+    if (entries[0].isIntersecting) loadPhotos();
+  }, { rootMargin: '200px' });
+  obs.observe(trigger);
+} else {
+  loadMoreBtn.classList.remove('hidden');
+}
 
 // Lightbox functions
 function openLightbox(src) {
   lbImg.src = src;
+  lbImg.alt = 'Preview image';
   lightbox.classList.remove('hidden');
   updateImageCounter();
   document.body.style.overflow = 'hidden';
@@ -118,6 +130,7 @@ function showNextImage() {
 closeBtn.addEventListener('click', closeLightbox);
 prevBtn.addEventListener('click', showPreviousImage);
 nextBtn.addEventListener('click', showNextImage);
+loadMoreBtn.addEventListener('click', loadPhotos);
 
 // Close lightbox when clicking outside image
 lightbox.addEventListener('click', (e) => {
