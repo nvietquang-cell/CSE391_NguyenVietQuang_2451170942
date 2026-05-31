@@ -1,0 +1,39 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Weather App</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1 class="title">🌤️ Weather Forecast</h1>
+      <button id="geolocate" class="btn btn-geo" title="Get weather for current location">📍 My Location</button>
+    </div>
+    
+    <div class="search-section">
+      <div class="search">
+        <input id="city" placeholder="Enter city name (e.g., London, Tokyo, New York)" autocomplete="off" />
+        <button id="btn" class="btn btn-search">🔍 Search</button>
+      </div>
+      
+      <div class="unit-toggle">
+        <span class="toggle-label">Temperature:</span>
+        <button id="unit-toggle" class="btn btn-toggle active">°C</button>
+      </div>
+    </div>
+
+    <div id="status" class="status-message hidden"></div>
+    <div id="result" class="card hidden"></div>
+
+    <div class="history-section">
+      <h3>📋 Recent Searches</h3>
+      <ul id="history" class="history"></ul>
+    </div>
+  </div>
+  
+  <script src="script.js"></script>
+</body>
+</html>
