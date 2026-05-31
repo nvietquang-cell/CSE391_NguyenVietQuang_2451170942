@@ -139,6 +139,11 @@ body {
   color: #1976d2;
 }
 
+.status-message.success {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
 .status-message.error {
   background: #ffebee;
   color: #d32f2f;

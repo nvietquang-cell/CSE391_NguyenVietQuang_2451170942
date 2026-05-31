@@ -48,7 +48,10 @@ function pushHistory(city) {
 }
 
 async function fetchWeather(city) {
-  if (!city) return;
+  if (!city) {
+    showStatus('❌ Please enter a city name', 'error');
+    return;
+  }
   hideResult();
   showStatus('⏳ Loading weather...', 'loading');
   
@@ -71,13 +74,14 @@ async function fetchWeather(city) {
       <p><strong>💧 Humidity:</strong> ${c.humidity}%</p>
       <p><strong>💨 Wind Speed:</strong> ${c.windspeedKmph} km/h</p>
       <p><strong>🌅 Condition:</strong> ${c.weatherDesc[0].value}</p>
-      <img src="${c.weatherIconUrl[0].value}" alt="weather icon" />
+      <img src="${c.weatherIconUrl[0].value}" alt="Weather icon" />
     `;
     
     showResult(html);
-    showStatus('✓ Weather loaded successfully', '');
+    showStatus('✓ Weather loaded successfully', 'success');
     pushHistory(city);
   } catch (err) {
+    hideResult();
     showStatus('❌ Error: ' + err.message, 'error');
   }
 }
