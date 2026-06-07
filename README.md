@@ -18,13 +18,13 @@ Dự án được phát triển chủ yếu bằng các ngôn ngữ Front-end:
 ## 📁 Cấu trúc thư mục
 Các bài tập được tổ chức theo từng phần rõ ràng:
 
-- 📂 `PBT_01/` - Phần bài tập 01
-- 📂 `PBT_02/` - Phần bài tập 02
-- 📂 `PBT_03/` - Phần bài tập 03
-- 📂 `PBT_04/` - Phần bài tập 04
-- 📂 `PBT_05/` - Phần bài tập 05
-- 📂 `PBT_06/` - Phần bài tập 06
-- 📂 `PBT_07/` - Phần bài tập 07
-- 📂 `PBT_08/` - Phần bài tập 08
-- 📂 `PBT_09/` - Phần bài tập 09
-- 📂 `PBT_10/` - Phần bài tập 10
+- 📂 `PBT_01/` - Phần bài tập 01: Mức độ hoàn thành: 100%
+- 📂 `PBT_02/` - Phần bài tập 02: Mức độ hoàn thành: 100%
+- 📂 `PBT_03/` - Phần bài tập 03: Mức độ hoàn thành: 100%
+- 📂 `PBT_04/` - Phần bài tập 04: Mức độ hoàn thành: 100%
+- 📂 `PBT_05/` - Phần bài tập 05: Mức độ hoàn thành: 100%
+- 📂 `PBT_06/` - Phần bài tập 06: Mức độ hoàn thành: 100%
+- 📂 `PBT_07/` - Phần bài tập 07: Mức độ hoàn thành: 100%
+- 📂 `PBT_08/` - Phần bài tập 08: Mức độ hoàn thành: 100%
+- 📂 `PBT_09/` - Phần bài tập 09: Mức độ hoàn thành: 100%
+- 📂 `PBT_10/` - Phần bài tập 10: Mức độ hoàn thành: 80%(Thiếu video obs)
